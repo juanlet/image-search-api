@@ -8,6 +8,8 @@ require('dotenv').config({
   silent: true
 });;
 
+var mongoose = require('mongoose');
+
 
 var app = express();
 
@@ -15,6 +17,11 @@ var app = express();
 
 var pub = __dirname;
 app.use(express.static(pub));
+
+var mongouri = process.env.MONGOLAB_URI || "mongodb://" + process.env.IP + ":27017/img-sal";
+    
+mongoose.connect(mongouri)    
+    .then(()=>console.log("connected"));
 
 
 // Set our default template engine to "jade"
@@ -33,22 +40,21 @@ app.get('/',function(req,res,next){
 });
 
 
-app.get('/search/:searchTerm?offset=:offset', function(req, res, next) {
+app.get('/search/:searchTerm', function(req, res, next) {
 
-  /* var searchTerm=req.params.searchTerm;
+   var searchTerm=req.params.searchTerm;
    var offSet=req.query.offset;
-    console.log(searchTerm,offSet); */
+
      
-     //urlConverter.redirectToShortURL(id,res, next);
+     imgSearcher.searchImage(mongoose,searchTerm,offSet,next)
+    .then(searchRes=>{res.json(searchRes);});
 
 });
 
 
 app.get('/latest', function(req, res, next) {
 
-
-
-  //urlConverter.shortenURL(url).then(obj=> {return res.json(obj);}).catch(next);
+   imgSearcher.getLatest();
 
 });
 
