@@ -32,7 +32,7 @@ app.set('view engine', 'jade');
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
-/* GET home page. */
+/* GET home page. **/
 app.get('/',function(req,res,next){
 
     res.render('index', { title: 'Express' });
