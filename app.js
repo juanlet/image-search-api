@@ -43,10 +43,11 @@ app.get('/',function(req,res,next){
 app.get('/search/:searchTerm', function(req, res, next) {
 
    var searchTerm=req.params.searchTerm;
-   var offSet=req.query.offset;
+   var offSet=req.query.offset || 0;
+   var pageSize=req.query.pageSize || 10;
 
      
-     imgSearcher.searchImage(mongoose,searchTerm,offSet,next)
+     imgSearcher.searchImage(mongoose,searchTerm,offSet,pageSize,next)
     .then(searchRes=>{res.json(searchRes);});
 
 });
@@ -54,7 +55,7 @@ app.get('/search/:searchTerm', function(req, res, next) {
 
 app.get('/latest', function(req, res, next) {
 
-   imgSearcher.getLatest();
+   imgSearcher.getLatest().then(lastSearches=>res.json(lastSearches));
 
 });
 

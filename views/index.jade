@@ -9,29 +9,93 @@ html(lang='en')
     style.
       body{
       font-family: 'Open Sans Condensed', sans-serif;
-      background-color: #512DA8;
+      background-color: #C2185B;
       color: white;
       }
-  
-        li{
+      li{
       margin-top:2%;
       margin-bottom:2%;
       }
       .well{
-          color: black;
-          font-family: 'Source Sans Pro', sans-serif;
-          box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+      color: black;
+      font-family: 'Source Sans Pro', sans-serif;
+      box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+      }
+      p{
+      margin-bottom:20px;
+      }
+      .code-wrapper{
+      margin-bottom:20px;
+      }
+      code{
+      margin-bottom:40px;
+      font-weight:bold;
       }
   body
     h1.text-center Image Search API
     #container.container.well
-      p You can search for an image with a certain criteria and paginating with a certain object:
+      p
+        | You can search for an image with a certain keyword and use the 'offset' parameter(default:0) to use pagination in your app. You can also send the 'pageSize' parameter to set the number of results(default:10):
       p
         ul
           li
             | A URL. Ex: 
-            a(href='https://urlshortenertool.herokuapp.com/new/https://www.google.com', target='_blank') https://urlshortenertool.herokuapp.com/new/https://www.google.com
-      
+            a(href='https://searchimageapi.herokuapp.com/search/kitten?offset=0&pageSize=2', target='_blank') https://searchimageapi.herokuapp.com/search/kitten?offset=0&pageSize=2
+      p You will get as a result a JSON with the following format:
+      .code-wrapper
+        code
+          | [
+          | {
+          | &quot;url&quot;: &quot;http://images4.fanpop.com/image/photos/16100000/Cute-Kitten-kittens-16122946-1280-800.jpg&quot;,
+          | &quot;snippet&quot;: &quot;Cute Kitten - Kittens Wallpaper (16122946) - Fanpop&quot;,
+          | &quot;thumbnail&quot;: &quot;http://ts1.mm.bing.net/th?id=OIP.M90ae3f98f7c894b47b8e036e4646a573H0&amp;pid=15.1&quot;,
+          | &quot;context&quot;: &quot;http://www.fanpop.com/clubs/kittens/images/16122946/title/cute-kitten-wallpaper&quot;
+          | },
+          | {
+          | &quot;url&quot;: &quot;http://3.bp.blogspot.com/-4kBvHvCJnOY/T-iKBteyTKI/AAAAAAAABLw/CwDU11DBqWc/s1600/kitten.jpeg&quot;,
+          | &quot;snippet&quot;: &quot;telling you my secrets.. Shh...: Kitten, may you rest in peace&quot;,
+          | &quot;thumbnail&quot;: &quot;http://ts3.mm.bing.net/th?id=OIP.M27ef47968b8ebd6e8f181cf43f9dedeao0&amp;pid=15.1&quot;,
+          | &quot;context&quot;: &quot;http://xin-rou.blogspot.com/2012/06/kitten-may-you-rest-in-peace.html&quot;
+          | }
+          | ]
+      p You can also get the latest searches made to the api by entering /latest:
       p
-        | You will get as a result a JSON with the following format:
-      b {"original_url": "https://www.google.com" ,"showrt_url": "https://urlshortenertool.herokuapp.com/5145"}
+        ul
+          li
+            | A URL. Ex: 
+            a(href='https://searchimageapi.herokuapp.com/latest', target='_blank') https://searchimageapi.herokuapp.com/latest
+      p You will get as a result a JSON with the following format:
+      .code-wrapper
+        code
+          | [{
+          | &quot;term&quot;: &quot;lolcats funny&quot;,
+          | &quot;date&quot;: &quot;2016-01-23T04:21:19.441Z&quot;
+          | }, {
+          | &quot;term&quot;: &quot;lolcats funny&quot;,
+          | &quot;date&quot;: &quot;2016-01-23T04:20:26.237Z&quot;
+          | }, {
+          | &quot;term&quot;: &quot;lolcats funny&quot;,
+          | &quot;date&quot;: &quot;2016-01-23T02:06:32.898Z&quot;
+          | }, {
+          | &quot;term&quot;: &quot;lolcats sad&quot;,
+          | &quot;date&quot;: &quot;2016-01-23T01:29:55.894Z&quot;
+          | }, {
+          | &quot;term&quot;: &quot;lolcats funny&quot;,
+          | &quot;date&quot;: &quot;2016-01-23T01:29:45.727Z&quot;
+          | }, {
+          | &quot;term&quot;: &quot;lolcats funny&quot;,
+          | &quot;date&quot;: &quot;2016-01-23T00:43:49.365Z&quot;
+          | }, {
+          | &quot;term&quot;: &quot;lolcats funny&quot;,
+          | &quot;date&quot;: &quot;2016-01-22T23:47:24.660Z&quot;
+          | }, {
+          | &quot;term&quot;: &quot;lolcats funny&quot;,
+          | &quot;date&quot;: &quot;2016-01-22T23:43:12.142Z&quot;
+          | }, {
+          | &quot;term&quot;: &quot;lolcats funny&quot;,
+          | &quot;date&quot;: &quot;2016-01-22T23:35:59.976Z&quot;
+          | }, {
+          | &quot;term&quot;: &quot;lolcats funny&quot;,
+          | &quot;date&quot;: &quot;2016-01-22T23:13:07.220Z&quot;
+          | }]
+

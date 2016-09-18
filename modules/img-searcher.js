@@ -3,18 +3,31 @@ var assert = require('assert');
 var Search = require('bing.search');
 var util = require('util');
 var Latest=require('./../models/Latest.js');
+const Promise = require("bluebird");
 
 module.exports={
     
-    searchImage:function(db,searchTerm,offset,next){
+    searchImage:function(db,searchTerm,offset,pageSize,next){
     console.log("searching"); 
     var search = new Search('1ROPTXstQWql5EMwzD6VFKUp+pf0BeSCEsVBNCw6iXk');
     
-  var promise=  new Promise((resolve, reject) => search.images(searchTerm, {top: 10, offset:offset}, (err, result) => { if (err) reject(err); else resolve(result)}));
+  return new Promise((resolve, reject) => search.images(searchTerm, {top: pageSize, skip:offset}, (err, result) => { 
+      
+      if (err) 
+          {reject(err);} 
+      else {
+          var formResult=result.map(elem=>{ 
+          
+              return {"url":elem.url,"snippet":elem.title,"thumbnail":elem.thumbnail.url,"context":elem.sourceUrl}; 
+              
+          });
+        resolve(formResult);  
+       }
+    }))
   
-  return  promise.then(searchResult=>{return searchResult}).catch(err=>{return next(err)})
+   .then(searchResult=>{return searchResult}).catch(err=>{return next(err)})
   
-  .then(searchRes=>{
+   .then(searchRes=>{
 
    //save it to latest searches
 
@@ -23,21 +36,31 @@ module.exports={
       "date": new Date().toLocaleString()
      };
     
-    return this.saveToDB(searchObject,Latest,searchRes);
+   this.saveToDB(searchObject,Latest,searchRes);
+   
+   return searchRes;
  
   });
   
     },
-  saveToDB:function(obj,Latest,searchRes){
-    var searchObj=new Latest(obj);
-    return new Promise(function(resolve,reject){searchObj.save(function (doc) {
-      resolve(console.log("Search saved"));
-    })});
-
-  },    
+    saveToDB: function(obj, Latest, searchRes) {
+        var searchObj = new Latest(obj);
+            searchObj.save(function(doc) {
+                console.log("Search saved");
+            });
+ 
+ },    
   getLatest:function(){
-  //conect to mongoose and get the latest searches      
-      
+  //get the latest searches      
+  
+  return Latest.find({}, {_id:0,__v:0}, {
+      "limit": 10,
+      "sort": {
+        "when": -1
+      }
+  });
+  
+  
   }    
     
     
